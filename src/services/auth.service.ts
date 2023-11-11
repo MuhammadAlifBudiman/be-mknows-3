@@ -172,4 +172,33 @@ export class AuthService {
 
     return { email: user.email };
   };
+
+  public async resendVerifyEmail(user_uuid: string): Promise<{ email: string }> {
+    const transaction = await DB.sequelize.transaction();
+    const user = await DB.Users.findOne({ where: { uuid: user_uuid } } );
+    if(!user) throw new HttpException(false, 400, "Invalid UUID");
+    if(user.email_verified_at) throw new HttpException(false, 400, "Email already verified");
+
+    try {
+      const validInMinutes = 10;
+      const otp = await new OTPService().createOTP({
+        user_id: user.pk,
+        type: "EMAIL_VERIFICATION",
+      }, validInMinutes, transaction);
+      
+      await sendEmailOTP({
+        email: user.email,
+        full_name: user.full_name,
+        otp: otp.key,
+        expiration_time: validInMinutes,
+      });
+
+      await transaction.commit();
+      
+      return { email: user.email };
+    } catch (error) {
+      await transaction.rollback();
+      throw error; 
+    }
+  }
 }

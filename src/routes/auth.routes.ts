@@ -7,11 +7,13 @@ import { AuthMiddleware } from "@middlewares/auth.middleware";
 import { ValidationMiddleware } from "@middlewares/validation.middleware";
 
 import { CreateUserDto, LoginUserDto } from "@dtos/users.dto";
+import Limitter from "@/middlewares/rate-limitter.middleware";
 
 export class AuthRoute implements Routes {
   public path = "auth";
   public router = Router();
   public auth = new AuthController();
+  public limitter = new Limitter();
 
   constructor() {
     this.initializeRoutes();
@@ -23,5 +25,6 @@ export class AuthRoute implements Routes {
     this.router.post(`/v1/${this.path}/logout`, AuthMiddleware, this.auth.logOut);
 
     this.router.post(`/v1/${this.path}/verify`, this.auth.verifyEmail);
+    this.router.post(`/v1/${this.path}/email/resend`, this.limitter.emailVerification(), this.auth.resendVerifyEmail);
   }
 }

@@ -20,6 +20,21 @@ class Limitter {
       },
     });
   };
+  
+  public emailVerification = (): RateLimitRequestHandler => {
+    const delay = 60 * 60 * 1000; // 1 jam
+
+    return rateLimit({
+      windowMs: delay, 
+      max: 5,
+      keyGenerator: (req) => req.ip, 
+      handler: () => {
+        throw new HttpExceptionTooManyRequests(
+          [`Too many requests from this IP, please try again after ${Math.ceil(delay / (60 * 1000))} minutes`],
+        );
+      },
+    });
+  };
 }
 
 export default Limitter;

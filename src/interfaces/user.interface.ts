@@ -13,4 +13,20 @@ export interface User {
   avatar?: File;
 }
 
+export interface UserQueryParams {
+  page?: string;
+  limit?: string;
+  search?: string;
+  order?: string;
+  sort?: string;
+}
+
+export interface UserParsed {
+  uuid: string;
+
+  full_name?: string;
+  display_picture?: number | string;
+  email: string;
+}
+
 export interface UserResponse extends Omit<User, "password"> {}

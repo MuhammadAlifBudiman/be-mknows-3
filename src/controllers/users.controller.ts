@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Container } from "typedi";
 import asyncHandler from "express-async-handler";
 
-import { User } from "@interfaces/user.interface";
+import { User, UserQueryParams } from "@interfaces/user.interface";
 import { UserService } from "@services/users.service";
 import { apiResponse } from "@/utils/apiResponse";
 import { getUserAgent } from "@utils/userAgent";
@@ -18,7 +18,8 @@ export class UserController {
   });
 
   public getUsers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const findAllUsersData: User[] = await this.user.findAllUser();
+    const query: UserQueryParams = req.query;
+    const findAllUsersData = await this.user.findAllUser(query);
 
     res.status(200).json(apiResponse(200, "OK", "All Users Retrieved", findAllUsersData));
   });

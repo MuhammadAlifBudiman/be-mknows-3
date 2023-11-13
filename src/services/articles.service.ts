@@ -114,6 +114,9 @@ export class ArticleService {
   }
 
   public async getArticlesByCategory(query: ArticleQueryParams, category_id: string): Promise<{ articles: ArticleParsed[], pagination: Pagination }> {
+    const { page = "1", limit = "10", search, order, sort } = query;
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    
     const category = await DB.Categories.findOne({ attributes: ["pk"], where:{ uuid: category_id } });
     if (!category) {
       throw new HttpException(false, 400, "Category is not found");
@@ -124,17 +127,73 @@ export class ArticleService {
       throw new HttpException(false, 400, "Article with that category is not found");
     }
 
+    const where = {};
+
+    if(search) {
+      where[Op.or] = [];
+
+      where[Op.or].push({
+        [Op.or]: [
+          {
+            title: {
+              [Op.iLike]: `%${search}%`,
+            },
+          },
+          {
+            description: {
+              [Op.iLike]: `%${search}%`,
+            },
+          },
+          {
+            content: {
+              [Op.iLike]: `%${search}%`,
+            },
+          },
+        ],
+      });
+
+      // Error missing FROM-clause entry for table \"author\"
+      // where[Op.or].push({
+      //   [Op.or]: [
+      //     {
+      //       "$author.full_name$": {
+      //         [Op.iLike]: `%${search}%`,
+      //       },
+      //     }
+      //   ],
+      // });
+    }
+
+    const orderClause = [];
+    
+    if (order && sort) {
+      if (sort === "asc" || sort === "desc") {
+        orderClause.push([order, sort]);
+      }
+    }
+
     const articleIds = articlesCategory.map(category => category.article_id);
 
     const { rows: articles, count } = await DB.Articles.findAndCountAll({ 
-      attributes: { exclude: ["pk"] },
       where: { 
-        pk: { [Op.in]: articleIds }
-      }
+        ...where,
+        pk: { [Op.in]: articleIds }, 
+      },
+      attributes: { exclude: ["pk"] },
+      limit: parseInt(limit),
+      offset,
+      order: orderClause
     });
+
+    const pagination: Pagination = {
+      current_page: parseInt(page),
+      size_page: articles.length,
+      max_page: Math.ceil(count / parseInt(limit)),
+      total_data: count,
+    };
     
     const transformedArticles = articles.map(article => this.articleParsed(article));
-    return { articles: transformedArticles, pagination: null };
+    return { articles: transformedArticles, pagination };
   }
 
   public async createArticle(author_id: number, data: CreateArticleDto): Promise<ArticleParsed> {

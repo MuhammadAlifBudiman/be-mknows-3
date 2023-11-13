@@ -22,7 +22,7 @@ export class ArticleController {
     const { category_id } = req.params;
     const query: ArticleQueryParams = req.query;
     const response = await this.article.getArticlesByCategory(query, category_id);
-    res.status(200).json(apiResponse(200, "OK", "Get Articles Success", response.articles));
+    res.status(200).json(apiResponse(200, "OK", "Get Articles Success", response.articles, response.pagination));
   });
 
   public getArticle = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {

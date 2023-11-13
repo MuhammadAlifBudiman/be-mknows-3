@@ -19,9 +19,9 @@ export class UserController {
 
   public getUsers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const query: UserQueryParams = req.query;
-    const findAllUsersData = await this.user.findAllUser(query);
+    const response = await this.user.findAllUser(query);
 
-    res.status(200).json(apiResponse(200, "OK", "All Users Retrieved", findAllUsersData));
+    res.status(200).json(apiResponse(200, "OK", "All Users Retrieved", response.users, response.pagination));
   });
 
   public getUserById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

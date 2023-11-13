@@ -39,11 +39,11 @@ export default function (sequelize: Sequelize): typeof ArticleCategoryModel {
   ArticleModel.belongsToMany(CategoryModel, { through: ArticleCategoryModel, foreignKey: "article_id" });
   CategoryModel.belongsToMany(ArticleModel, { through: ArticleCategoryModel, foreignKey: "category_id" });
 
-  ArticleModel.hasMany(ArticleCategoryModel);
-  ArticleCategoryModel.belongsTo(ArticleModel);
+  ArticleModel.hasMany(ArticleCategoryModel, { foreignKey: "article_id", as: "categories" });
+  ArticleCategoryModel.belongsTo(ArticleModel, { foreignKey: "article_id", as: "article" });
 
-  CategoryModel.hasMany(ArticleCategoryModel);
-  ArticleCategoryModel.belongsTo(CategoryModel);
+  CategoryModel.hasMany(ArticleCategoryModel, { foreignKey: "category_id", as: "category" });
+  ArticleCategoryModel.belongsTo(CategoryModel, { foreignKey: "category_id", as: "category" });
 
   return ArticleCategoryModel;
 }

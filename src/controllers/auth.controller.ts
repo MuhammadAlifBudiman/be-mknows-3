@@ -53,14 +53,4 @@ export class AuthController {
       email: response.email
     }));
   });
-  
-  public resendVerifyEmail = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const { uuid } = req.body;
-    if(!uuid) throw new HttpException(false, 400, "UUID is required");
-
-    const response = await this.auth.resendVerifyEmail(uuid);
-    res.status(200).json(apiResponse(200, "OK", "Verification email has been sent", {
-      email: response.email
-    }));
-  });
 }

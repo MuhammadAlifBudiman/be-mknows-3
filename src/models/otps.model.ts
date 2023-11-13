@@ -10,9 +10,9 @@ export class OTPModel extends Model<OTP, OTPCreationAttributes> implements OTP {
   
   public user_id: number;
 
-  public key: string;
-  public type: string;
-  public status: string;
+  public key: string; // otp nya
+  public type: string; // FORGET_PASSWORD, EMAIL_VERIFICATION
+  public status: string; // AVAILABLE, USED, EXPIRED
 
   public expired_at: Date;
 

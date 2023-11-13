@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, MinLength, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, MinLength, IsOptional, IsArray, IsUUID } from "class-validator";
 
 export class CreateArticleDto {
   @IsString()
@@ -19,6 +19,11 @@ export class CreateArticleDto {
   @IsNotEmpty()
   @MinLength(36)
   public thumbnail: string | number;
+
+  @IsArray()
+  @IsUUID("4", { each: true })
+  @IsNotEmpty()
+  public categories: string[];
 }
 
 export class UpdateArticleDto {
@@ -40,4 +45,9 @@ export class UpdateArticleDto {
   @MinLength(36)
   @IsOptional()
   public thumbnail: string | number;
+
+  @IsArray()
+  @IsUUID("4", { each: true })
+  @IsOptional()
+  public categories: string[];
 }

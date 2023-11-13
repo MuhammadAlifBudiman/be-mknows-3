@@ -3,9 +3,12 @@ import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import { User } from "@interfaces/user.interface";
 import { File } from "@interfaces/file.interface";
 import { Article } from "@interfaces/article.interface";
+import { ArticleCategory } from "@interfaces/article.interface";
 
 import { UserModel } from "@models/users.model";
 import { FileModel } from "@models/files.model";
+import { CategoryModel } from '@models/categories.model';
+import { ArticleCategoryModel } from '@models/articles_categories.model';
 
 export type ArticleCreationAttributes = Optional<Article, "pk" | "uuid">;
 
@@ -20,8 +23,10 @@ export class ArticleModel extends Model<Article, ArticleCreationAttributes> impl
   public thumbnail_id: number;
   public author_id: number;
 
+  // Assosication
   public readonly thumbnail: File;
   public readonly author: User;
+  public readonly categories: ArticleCategory[];
 
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
@@ -61,7 +66,7 @@ export default function (sequelize: Sequelize): typeof ArticleModel {
         // },
         // onDelete: "CASCADE",
         // onUpdate: "CASCADE",
-      },
+      },  
       author_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -97,6 +102,16 @@ export default function (sequelize: Sequelize): typeof ArticleModel {
               }
             ]
           },
+          {
+            attributes: ["category_id"],
+            model: ArticleCategoryModel,
+            as: "categories",
+            include: [{
+              attributes: ["uuid", "name", "description"],
+              model: CategoryModel, 
+              as: "category"
+            }]
+          }
         ],
       }
     },

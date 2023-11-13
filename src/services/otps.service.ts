@@ -8,6 +8,7 @@ import { HttpException } from "@exceptions/HttpException";
 @Service()
 export class OTPService {
   public async createOTP(data, validInMinutes: number, transaction: Transaction): Promise<OTP> {
+    // untuk generate otp || validInMinutes = mau valid berapa menit si otpnya
     const key = Math.floor(Math.pow(10, 8 - 1) + Math.random() * 9 * Math.pow(10, 8 - 1)).toString();
     const currentDateTime = new Date();
     const expirationTime = new Date(currentDateTime.getTime() + validInMinutes * 60000);

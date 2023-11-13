@@ -20,9 +20,9 @@ class Limitter {
       },
     });
   };
-  
+
   public emailVerification = (): RateLimitRequestHandler => {
-    const delay = 60 * 60 * 1000; // 1 jam
+    const delay = 3 * 60 * 1000; // 3 menit
 
     return rateLimit({
       windowMs: delay, 
@@ -30,7 +30,7 @@ class Limitter {
       keyGenerator: (req) => req.ip, 
       handler: () => {
         throw new HttpExceptionTooManyRequests(
-          [`Too many requests from this IP, please try again after ${Math.ceil(delay / (60 * 1000))} minutes`],
+          ["Too many requests from this IP, please try again after 5 minutes"],
         );
       },
     });

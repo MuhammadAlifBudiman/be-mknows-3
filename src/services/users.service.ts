@@ -45,7 +45,6 @@ export class UserService {
     }
 
     const orderClause = [];
-    
     if (order && sort) {
       if (sort === "asc" || sort === "desc") {
         orderClause.push([order, sort]);

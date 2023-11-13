@@ -5,14 +5,17 @@ import { logger } from "@utils/logger";
 import config from "@config/database";
 const dbConfig = config[NODE_ENV] || config["development"];
 
+import OTPModel from "@/models/otps.model";
+
 import RoleModel from "@models/roles.model";
 import FileModel from "@models/files.model";
 import UserModel from "@models/users.model";
 import UserRoleModel from "@models/users_roles.model";
 import UserSessionModel from "@models/users_sessions.model";
 
+import CategoryModel from "@models/categories.model";
 import ArticleModel from "@models/articles.model";
-import OTPModel from "@/models/otps.model";
+import ArticleCategoryModel from "@models/articles_categories.model";
 
 const sequelize = new Sequelize(
   dbConfig.database as string,
@@ -35,7 +38,9 @@ export const DB = {
   UsersRoles: UserRoleModel(sequelize),
   UsersSessions: UserSessionModel(sequelize),
 
+  Categories: CategoryModel(sequelize),
   Articles: ArticleModel(sequelize),
+  ArticlesCategories: ArticleCategoryModel(sequelize),
 
   sequelize, // connection instance (RAW queries)
   Sequelize, // library

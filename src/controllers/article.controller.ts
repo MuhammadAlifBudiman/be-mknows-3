@@ -13,16 +13,33 @@ export class ArticleController {
   private article = Container.get(ArticleService);
 
   public getArticles = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {
-    const params: ArticleQueryParams = req.query;
-    const response = await this.article.getArticles(params);
+    const query: ArticleQueryParams = req.query;
+    const response = await this.article.getArticles(query);
     res.status(200).json(apiResponse(200, "OK", "Get Articles Success", response.articles, response.pagination));
+  });
+
+  public getArticlesByCategory = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    const { category_id } = req.params;
+    const query: ArticleQueryParams = req.query;
+    const response = await this.article.getArticlesByCategory(query, category_id);
+    res.status(200).json(apiResponse(200, "OK", "Get Articles Success", response.articles));
+  });
+
+  public getArticle = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    const { article_id } = req.params;
+    const response: ArticleParsed = await this.article.getArticleById(article_id);
+    res.status(200).json(apiResponse(200, "OK", "Get Article Success", response));
   });
 
   public createArticle = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const user_id = req.user.pk as number;
     const data: CreateArticleDto = req.body;
 
+<<<<<<< HEAD
     const response: Article = await this.article.createArticle(user_id, data);
+=======
+    const response: ArticleParsed = await this.article.createArticle(user_id, data);
+>>>>>>> e3bccbb (fix: users pagination)
     res.status(201).json(apiResponse(201, "OK", "Create Article Success", response));
   });
 

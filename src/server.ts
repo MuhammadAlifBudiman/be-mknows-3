@@ -6,6 +6,7 @@ import { UserRoute } from "@routes/users.routes";
 import { AccountRoute } from "@routes/account.routes";
 import { FileRoute } from "@routes/files.routes";
 
+import { CategoryRoute } from "@routes/categories.routes";
 import { ArticleRoute } from "@routes/articles.routes";
 
 ValidateEnv();
@@ -16,7 +17,8 @@ const app = new App([
   new AccountRoute(),
   new FileRoute(),
 
-  new ArticleRoute()
+  new CategoryRoute(),
+  new ArticleRoute(),
 ]);
 
 app.listen();

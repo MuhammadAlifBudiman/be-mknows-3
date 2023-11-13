@@ -16,7 +16,9 @@ export class ArticleRoute implements Routes {
   }
 
   private initializeRoutes() {
+    this.router.get(`/v1/${this.path}/categories/:category_id`, this.article.getArticlesByCategory);
     this.router.get(`/v1/${this.path}`, this.article.getArticles);
+    this.router.get(`/v1/${this.path}/:article_id`, this.article.getArticle);
     this.router.post(`/v1/${this.path}`, 
       AuthMiddleware, ValidationMiddleware(CreateArticleDto), 
       this.article.createArticle

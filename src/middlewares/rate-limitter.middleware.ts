@@ -26,7 +26,7 @@ class Limitter {
 
     return rateLimit({
       windowMs: delay, 
-      max: 5,
+      max: 3,
       keyGenerator: (req) => req.ip, 
       handler: () => {
         throw new HttpExceptionTooManyRequests(

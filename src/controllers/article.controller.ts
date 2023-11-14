@@ -35,11 +35,7 @@ export class ArticleController {
     const user_id = req.user.pk as number;
     const data: CreateArticleDto = req.body;
 
-<<<<<<< HEAD
-    const response: Article = await this.article.createArticle(user_id, data);
-=======
     const response: ArticleParsed = await this.article.createArticle(user_id, data);
->>>>>>> e3bccbb (fix: users pagination)
     res.status(201).json(apiResponse(201, "OK", "Create Article Success", response));
   });
 

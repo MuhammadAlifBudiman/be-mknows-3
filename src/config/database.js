@@ -1,49 +1,65 @@
+// Database configuration file for Sequelize ORM
+// Loads environment variables for database connection
 const { NODE_ENV, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE } = process.env;
 
 module.exports = {
+  /**
+   * Development environment configuration
+   * @property {string} dialect - Database dialect (PostgreSQL)
+   * @property {string} host - Database host from environment variable
+   * @property {string} username - Database username from environment variable
+   * @property {string} password - Database password from environment variable
+   * @property {string} database - Database name from environment variable
+   * @property {number} port - Database port from environment variable
+   * @property {object} define - Sequelize model definition options
+   * @property {object} pool - Connection pool settings
+   * @property {boolean} logQueryParameters - Log query parameters in development
+   * @property {boolean} logging - Disable SQL query logging
+   * @property {boolean} benchmark - Disable query benchmarking
+   */
   development: {
-    dialect: "postgres",
-    host: DB_HOST,
-
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
-    port: DB_PORT,
+    dialect: "postgres", // Use PostgreSQL as the database
+    host: DB_HOST, // Database host
+    username: DB_USER, // Database username
+    password: DB_PASSWORD, // Database password
+    database: DB_DATABASE, // Database name
+    port: DB_PORT, // Database port
     define: {
-      underscored: true,
-      freezeTableName: true,
-      paranoid: true,
-
-      createdAt: "created_at",
-      updatedAt: "updated_at",
-      deletedAt: "deleted_at",
+      underscored: true, // Use snake_case for automatically added attributes
+      freezeTableName: true, // Prevent Sequelize from pluralizing table names
+      paranoid: true, // Enable soft deletes (adds deletedAt column)
+      createdAt: "created_at", // Custom name for createdAt timestamp
+      updatedAt: "updated_at", // Custom name for updatedAt timestamp
+      deletedAt: "deleted_at", // Custom name for deletedAt timestamp
     },
     pool: {
-      min: 0,
-      max: 5,
+      min: 0, // Minimum number of connections in pool
+      max: 5, // Maximum number of connections in pool
     },
-    logQueryParameters: NODE_ENV === "development",
-    logging: false,
-    benchmark: false,
+    logQueryParameters: NODE_ENV === "development", // Log query parameters only in development
+    logging: false, // Disable SQL query logging
+    benchmark: false, // Disable query benchmarking
   },
+  /**
+   * Production environment configuration
+   * (Same structure as development, but can be customized for production needs)
+   */
   production: {
-    dialect: "postgres",
-    host: DB_HOST,
-
-    username: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_DATABASE,
-    port: DB_PORT,
+    dialect: "postgres", // Use PostgreSQL as the database
+    host: DB_HOST, // Database host
+    username: DB_USER, // Database username
+    password: DB_PASSWORD, // Database password
+    database: DB_DATABASE, // Database name
+    port: DB_PORT, // Database port
     define: {
-      underscored: true,
-      freezeTableName: true,
-      paranoid: true,
-
-      createdAt: "created_at",
-      updatedAt: "updated_at",
-      deletedAt: "deleted_at",
+      underscored: true, // Use snake_case for automatically added attributes
+      freezeTableName: true, // Prevent Sequelize from pluralizing table names
+      paranoid: true, // Enable soft deletes (adds deletedAt column)
+      createdAt: "created_at", // Custom name for createdAt timestamp
+      updatedAt: "updated_at", // Custom name for updatedAt timestamp
+      deletedAt: "deleted_at", // Custom name for deletedAt timestamp
     },
-    logging: false,
-    benchmark: false,
+    logging: false, // Disable SQL query logging
+    benchmark: false, // Disable query benchmarking
   }
 }
